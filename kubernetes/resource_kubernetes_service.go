@@ -87,6 +87,33 @@ func resourceKubernetesServiceSchemaV1() map[string]*schema.Schema {
 							string(api.ServiceExternalTrafficPolicyTypeCluster),
 						}, false),
 					},
+					"ip_families": {
+						Type:        schema.TypeList,
+						Description: "",
+						Optional:    true,
+						Computed:    true,
+						ForceNew:    true,
+						MinItems:    1,
+						MaxItems:    2,
+						Elem: &schema.Schema{
+							Type: schema.TypeString,
+							ValidateFunc: validation.StringInSlice([]string{
+								string(api.IPv4Protocol),
+								string(api.IPv6Protocol),
+							}, false),
+						},
+					},
+					"ip_family_policy": {
+						Type:        schema.TypeString,
+						Description: "",
+						Optional:    true,
+						Computed:    true,
+						ValidateFunc: validation.StringInSlice([]string{
+							string(api.IPFamilyPolicySingleStack),
+							string(api.IPFamilyPolicyPreferDualStack),
+							string(api.IPFamilyPolicyRequireDualStack),
+						}, false),
+					},
 					"load_balancer_ip": {
 						Type:         schema.TypeString,
 						Description:  "Only applies to `type = LoadBalancer`. LoadBalancer will get created with the IP specified in this field. This feature depends on whether the underlying cloud-provider supports specifying this field when a load balancer is created. This field will be ignored if the cloud-provider does not support the feature.",
